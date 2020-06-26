@@ -1,8 +1,10 @@
-import 'dart:html';
 import 'package:pogo/models/raid.dart';
 
 class Gym {
-  Coordinates location;
+  double lat;
+  double lon;
   String name;
   Raid raid;
+
+  Gym(this.lat, this.lon, this.name, this.raid);
 }

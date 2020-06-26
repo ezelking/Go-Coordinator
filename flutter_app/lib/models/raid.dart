@@ -7,4 +7,6 @@ class Raid {
   int tier;
   Pokemon raidBoss;
   List<RaidGroup> groups;
+
+  Raid(this.startTime, this.endTime, this.tier, this.raidBoss, this.groups);
 }
