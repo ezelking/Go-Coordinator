@@ -22,10 +22,8 @@ class ReportRaidAlert {
         );
       },
     );
-    DateTime today = DateTime.now().toUtc();
     _raid.startTime = Constants.convertDateTime(selectedTime);
-    _raid.endTime = Constants.convertDateTime(selectedTime.replacing(
-        hour: selectedTime.hour, minute: selectedTime.minute + 45));
+    _raid.endTime = _raid.startTime.add(Duration(minutes: 45));
     return _raid;
   }
 }

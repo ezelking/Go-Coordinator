@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pogo/models/gym.dart';
@@ -33,6 +35,12 @@ class RaidProvider with ChangeNotifier {
 
   createRaidGroup(String gymId, RaidGroup group) {
     gyms.firstWhere((element) => element.gymId == gymId).raid.groups.add(group);
+    notifyListeners();
+  }
+
+  addGym(double lat, double lon, String name) {
+    Random rnd = Random();
+    gyms.add(Gym(lat, lat, name, null, rnd.nextInt(100000).toString()));
     notifyListeners();
   }
 }
