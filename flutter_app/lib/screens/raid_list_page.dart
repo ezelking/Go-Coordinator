@@ -14,13 +14,6 @@ class RaidListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var gyms = context.watch<RaidProvider>().gyms;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Provider.of<RaidProvider>(context, listen: false)
-              .addGym(0.0, 0.0, 'New Gym');
-        },
-        child: Icon(Icons.add_location),
-      ),
       body: ListView.builder(
           itemCount: gyms.length,
           itemBuilder: (BuildContext context, int index) {

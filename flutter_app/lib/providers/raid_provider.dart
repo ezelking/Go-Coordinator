@@ -7,6 +7,7 @@ import 'package:pogo/models/player.dart';
 import 'package:pogo/models/pokemon.dart';
 import 'package:pogo/models/raid.dart';
 import 'package:pogo/models/raid_group.dart';
+import 'package:latlong/latlong.dart';
 
 class RaidProvider with ChangeNotifier {
   List<Gym> gyms;
@@ -15,8 +16,7 @@ class RaidProvider with ChangeNotifier {
   RaidProvider() {
     gyms = [
       Gym(
-          0.0,
-          0.0,
+          LatLng(0.0, 0.0),
           'abc',
           Raid(DateTime.now(), DateTime.now().add(Duration(minutes: 45)), 5,
               Pokemon(), [
@@ -24,7 +24,7 @@ class RaidProvider with ChangeNotifier {
                 [Player('john doe', 5)])
           ]),
           '00000'),
-      Gym(0.0, 0.0, 'def', null, '00001')
+      Gym(LatLng(0.0, 0.0), 'def', null, '00001')
     ];
   }
 
@@ -38,9 +38,9 @@ class RaidProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  addGym(double lat, double lon, String name) {
+  addGym(LatLng pos, String name) {
     Random rnd = Random();
-    gyms.add(Gym(lat, lat, name, null, rnd.nextInt(100000).toString()));
+    gyms.add(Gym(pos, name, null, rnd.nextInt(100000).toString()));
     notifyListeners();
   }
 }

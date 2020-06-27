@@ -1,11 +1,11 @@
 import 'package:pogo/models/raid.dart';
+import 'package:latlong/latlong.dart';
 
 class Gym {
-  double lat;
-  double lon;
+  LatLng pos;
   String name;
   Raid raid;
   String gymId;
 
-  Gym(this.lat, this.lon, this.name, this.raid, this.gymId);
+  Gym(this.pos, this.name, this.raid, this.gymId);
 }

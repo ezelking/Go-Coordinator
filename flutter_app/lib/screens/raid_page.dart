@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pogo/providers/raid_provider.dart';
 import 'package:pogo/screens/raid_list_page.dart';
 import 'package:pogo/screens/raid_map_page.dart';
+import 'package:provider/provider.dart';
 
 class RaidPage extends StatelessWidget {
   static String id = 'RaidPage';
@@ -22,6 +24,7 @@ class RaidPage extends StatelessWidget {
             }).toList(),
           ),
           body: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             children: choices.map((Choice choice) {
               return Padding(
                 padding: const EdgeInsets.all(16.0),
