@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pogo/providers/raid_provider.dart';
 import 'package:pogo/screens/raid_list_page.dart';
+import 'package:pogo/screens/raid_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -20,9 +21,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: RaidListPage(),
-        initialRoute: RaidListPage.id,
-        routes: {RaidListPage.id: (context) => RaidListPage()},
+        initialRoute: RaidPage.id,
+        routes: {RaidPage.id: (context) => RaidPage()},
       ),
     );
   }
