@@ -13,9 +13,22 @@ class RaidListPage extends StatelessWidget {
           itemCount: gyms.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
-              leading: Image.asset(
-                'assets/images/tier-${gyms[index].raid.tier}-egg.png',
-                scale: 4,
+              leading: SizedBox(
+                width: 50,
+                child: Center(
+                  child: (gyms[index].raid != null)
+                      ? Image.asset(
+                          'assets/images/tier-${gyms[index].raid.tier}-egg.png',
+                          scale: 4,
+                        )
+                      : IconButton(
+                          icon: Icon(Icons.alarm_add),
+                          onPressed: () {
+                            Provider.of<RaidProvider>(context, listen: false)
+                                .reportRaid(gyms[index].gymId);
+                          },
+                        ),
+                ),
               ),
               title: Text(gyms[index].name),
               trailing: SizedBox(
@@ -23,30 +36,32 @@ class RaidListPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        for (int i = 0; i < gyms[index].raid.tier; i++)
-                          Image.asset(
-                            'assets/images/raid-icon.png',
-                            scale: 4,
-                            color: Colors.black,
-                          ),
-                      ],
-                    ),
-                    RichText(
-                      text: TextSpan(
-                          style:
-                              TextStyle(fontSize: 18, color: Colors.red[900]),
-                          text:
-                              '${gyms[index].raid.startTime.hour}:${gyms[index].raid.startTime.minute}',
-                          children: [
-                            TextSpan(text: '-'),
-                            TextSpan(
-                                text:
-                                    '${gyms[index].raid.endTime.hour}:${gyms[index].raid.endTime.minute}')
-                          ]),
-                    )
+                    if (gyms[index].raid != null)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          for (int i = 0; i < gyms[index].raid.tier; i++)
+                            Image.asset(
+                              'assets/images/raid-icon.png',
+                              scale: 4,
+                              color: Colors.black,
+                            ),
+                        ],
+                      ),
+                    if (gyms[index].raid != null)
+                      RichText(
+                        text: TextSpan(
+                            style:
+                                TextStyle(fontSize: 18, color: Colors.red[900]),
+                            text:
+                                '${gyms[index].raid.startTime.hour}:${gyms[index].raid.startTime.minute}',
+                            children: [
+                              TextSpan(text: '-'),
+                              TextSpan(
+                                  text:
+                                      '${gyms[index].raid.endTime.hour}:${gyms[index].raid.endTime.minute}')
+                            ]),
+                      )
                   ],
                 ),
               ),

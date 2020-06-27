@@ -20,7 +20,18 @@ class RaidProvider with ChangeNotifier {
             RaidGroup(DateTime.now().add(Duration(minutes: 20)),
                 [Player('john doe', 5)])
           ]),
-          '00000')
+          '00000'),
+      Gym(0.0, 0.0, 'def', null, '00001')
     ];
+  }
+
+  reportRaid(String gymId) {
+    gyms.firstWhere((element) => element.gymId == gymId).raid = Raid(
+        DateTime.now(),
+        DateTime.now().add(Duration(minutes: 45)),
+        5,
+        Pokemon(),
+        [RaidGroup(DateTime.now().add(Duration(minutes: 20)), [])]);
+    notifyListeners();
   }
 }
