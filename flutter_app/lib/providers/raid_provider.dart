@@ -19,7 +19,8 @@ class RaidProvider with ChangeNotifier {
               Pokemon(), [
             RaidGroup(DateTime.now().add(Duration(minutes: 20)),
                 [Player('john doe', 5)])
-          ]))
+          ]),
+          '00000')
     ];
   }
 }

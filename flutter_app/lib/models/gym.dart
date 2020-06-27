@@ -5,6 +5,7 @@ class Gym {
   double lon;
   String name;
   Raid raid;
+  String gymId;
 
-  Gym(this.lat, this.lon, this.name, this.raid);
+  Gym(this.lat, this.lon, this.name, this.raid, this.gymId);
 }
