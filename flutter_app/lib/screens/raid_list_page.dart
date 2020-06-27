@@ -20,15 +20,33 @@ class RaidListPage extends StatelessWidget {
               title: Text(gyms[index].name),
               trailing: SizedBox(
                 width: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    for (int i = 0; i < gyms[index].raid.tier; i++)
-                      Image.asset(
-                        'assets/images/raid-icon.png',
-                        scale: 4,
-                        color: Colors.black,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        for (int i = 0; i < gyms[index].raid.tier; i++)
+                          Image.asset(
+                            'assets/images/raid-icon.png',
+                            scale: 4,
+                            color: Colors.black,
+                          ),
+                      ],
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          style:
+                              TextStyle(fontSize: 18, color: Colors.red[900]),
+                          text:
+                              '${gyms[index].raid.startTime.hour}:${gyms[index].raid.startTime.minute}',
+                          children: [
+                            TextSpan(text: '-'),
+                            TextSpan(
+                                text:
+                                    '${gyms[index].raid.endTime.hour}:${gyms[index].raid.endTime.minute}')
+                          ]),
+                    )
                   ],
                 ),
               ),
