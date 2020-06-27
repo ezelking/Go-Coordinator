@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pogo/models/raid.dart';
+import 'package:pogo/constants.dart';
 
 class ReportRaidAlert {
   static Future<Raid> alert(BuildContext context) async {
@@ -22,10 +23,9 @@ class ReportRaidAlert {
       },
     );
     DateTime today = DateTime.now().toUtc();
-    _raid.startTime = DateTime.utc(today.year, today.month, today.day,
-        selectedTime.hour, selectedTime.minute);
-    _raid.endTime = DateTime.utc(today.year, today.month, today.day,
-        selectedTime.hour, selectedTime.minute + 45);
+    _raid.startTime = Constants.convertDateTime(selectedTime);
+    _raid.endTime = Constants.convertDateTime(selectedTime.replacing(
+        hour: selectedTime.hour, minute: selectedTime.minute + 45));
     return _raid;
   }
 }

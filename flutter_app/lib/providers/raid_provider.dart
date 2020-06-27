@@ -26,8 +26,13 @@ class RaidProvider with ChangeNotifier {
     ];
   }
 
-  reportRaid(BuildContext context, String gymId, Raid raid) async {
+  reportRaid(String gymId, Raid raid) {
     gyms.firstWhere((element) => element.gymId == gymId).raid = raid;
+    notifyListeners();
+  }
+
+  createRaidGroup(String gymId, RaidGroup group) {
+    gyms.firstWhere((element) => element.gymId == gymId).raid.groups.add(group);
     notifyListeners();
   }
 }

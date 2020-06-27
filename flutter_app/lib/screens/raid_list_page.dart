@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pogo/alerts/report_raid_alert.dart';
+import 'package:pogo/models/gym.dart';
 import 'package:pogo/models/raid_group.dart';
 import 'package:pogo/providers/raid_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../constants.dart';
 
 class RaidListPage extends StatelessWidget {
   static String id = 'RaidListPage';
@@ -31,7 +34,7 @@ class RaidListPage extends StatelessWidget {
                                       {
                                         Provider.of<RaidProvider>(context,
                                                 listen: false)
-                                            .reportRaid(context,
+                                            .reportRaid(
                                                 gyms[index].gymId, value)
                                       }
                                   });
@@ -74,18 +77,34 @@ class RaidListPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                children: _createChildren(gyms[index]?.raid?.groups ?? null));
+                children: _createChildren(gyms[index], context));
           }),
     );
   }
 
-  List<Widget> _createChildren(List<RaidGroup> groups) {
+  List<Widget> _createChildren(Gym gym, BuildContext context) {
+    var groups = gym?.raid?.groups ?? null;
     return List<Widget>.generate((groups == null) ? 0 : groups.length + 1,
         (int index) {
       return (index >= groups.length)
           ? ListTile(
               title: Text('Create New Raid Party'),
               trailing: Icon(Icons.group_add),
+              onTap: () async {
+                var selectedTime = await showTimePicker(
+                  initialTime: TimeOfDay.now(),
+                  context: context,
+                );
+                var convertedTime = Constants.convertDateTime(selectedTime);
+                if (convertedTime.isAfter(DateTime.now()) &&
+                    convertedTime.isAfter(gym.raid.startTime) &&
+                    convertedTime.isBefore(gym.raid.endTime))
+                  Provider.of<RaidProvider>(context, listen: false)
+                      .createRaidGroup(
+                          gym.gymId,
+                          RaidGroup(
+                              Constants.convertDateTime(selectedTime), []));
+              },
             )
           : ListTile(
               title: Text(
