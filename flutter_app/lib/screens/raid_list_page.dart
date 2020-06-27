@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pogo/alerts/report_raid_alert.dart';
 import 'package:pogo/providers/raid_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -23,9 +24,16 @@ class RaidListPage extends StatelessWidget {
                         )
                       : IconButton(
                           icon: Icon(Icons.alarm_add),
-                          onPressed: () {
-                            Provider.of<RaidProvider>(context, listen: false)
-                                .reportRaid(gyms[index].gymId);
+                          onPressed: () async {
+                            ReportRaidAlert.alert(context).then((value) => {
+                                  if (value != null)
+                                    {
+                                      Provider.of<RaidProvider>(context,
+                                              listen: false)
+                                          .reportRaid(
+                                              context, gyms[index].gymId, value)
+                                    }
+                                });
                           },
                         ),
                 ),
@@ -54,12 +62,12 @@ class RaidListPage extends StatelessWidget {
                             style:
                                 TextStyle(fontSize: 18, color: Colors.red[900]),
                             text:
-                                '${gyms[index].raid.startTime.hour}:${gyms[index].raid.startTime.minute}',
+                                '${gyms[index].raid.startTime.hour.toString().padLeft(2, '0')}:${gyms[index].raid.startTime.minute.toString().padLeft(2, '0')}',
                             children: [
                               TextSpan(text: '-'),
                               TextSpan(
                                   text:
-                                      '${gyms[index].raid.endTime.hour}:${gyms[index].raid.endTime.minute}')
+                                      '${gyms[index].raid.endTime.hour.toString().padLeft(2, '0')}:${gyms[index].raid.endTime.minute.toString().padLeft(2, '0')}')
                             ]),
                       )
                   ],

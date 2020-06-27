@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:pogo/models/gym.dart';
 import 'package:pogo/models/player.dart';
 import 'package:pogo/models/pokemon.dart';
@@ -25,13 +26,8 @@ class RaidProvider with ChangeNotifier {
     ];
   }
 
-  reportRaid(String gymId) {
-    gyms.firstWhere((element) => element.gymId == gymId).raid = Raid(
-        DateTime.now(),
-        DateTime.now().add(Duration(minutes: 45)),
-        5,
-        Pokemon(),
-        [RaidGroup(DateTime.now().add(Duration(minutes: 20)), [])]);
+  reportRaid(BuildContext context, String gymId, Raid raid) async {
+    gyms.firstWhere((element) => element.gymId == gymId).raid = raid;
     notifyListeners();
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pogo/providers/raid_provider.dart';
-import 'package:pogo/screens/raid_list_page.dart';
 import 'package:pogo/screens/raid_page.dart';
 import 'package:provider/provider.dart';
 
