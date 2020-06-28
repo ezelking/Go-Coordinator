@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "41625025093",
+    "firebase_url": "https://go-coordinator.firebaseio.com",
+    "project_id": "go-coordinator",
+    "storage_bucket": "go-coordinator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41625025093:android:11d61dab1982c82468412c",
+        "android_client_info": {
+          "package_name": "com.ezelking.pogo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41625025093-s70c5e3ksufbcl3pi3hhmifevlmh3ah4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD789lqEWLL8eRd_KEJGRaNBgre4kVw2fQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41625025093-s70c5e3ksufbcl3pi3hhmifevlmh3ah4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
