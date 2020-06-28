@@ -44,10 +44,7 @@ class RaidProvider with ChangeNotifier {
       var raid = Raid.fromJson(postSnapshot.data['raid']);
       raid.groups.add(group);
       if (postSnapshot.exists) {
-        await tx.update(postRef, <String, dynamic>{'raid': raid.toJson()}).then(
-            (value) => Future.delayed(const Duration(seconds: 5), () {
-                  getGyms();
-                }));
+        await tx.update(postRef, <String, dynamic>{'raid': raid.toJson()});
       }
     });
   }
@@ -55,12 +52,8 @@ class RaidProvider with ChangeNotifier {
   addGym(LatLng pos, String name) {
     Random rnd = Random();
     _firestore.runTransaction((transaction) async {
-      await transaction
-          .set(_firestore.collection("gyms").document(),
-              Gym(pos, name, null, '').toJson())
-          .then((value) => Future.delayed(const Duration(seconds: 5), () {
-                getGyms();
-              }));
+      await transaction.set(_firestore.collection("gyms").document(),
+          Gym(pos, name, null, '').toJson());
     });
   }
 }

@@ -1,9 +1,13 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:pogo/alerts/report_raid_alert.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pogo/models/gym.dart';
 import 'package:provider/provider.dart';
 import 'package:pogo/providers/raid_provider.dart';
 import 'dart:math' as math;
@@ -16,11 +20,45 @@ class RaidMapPage extends StatefulWidget {
 class _RaidMapPageState extends State<RaidMapPage> {
   GymInfo gymInfo;
   MapController mapController;
+  StreamSubscription _subscription;
+  List<Marker> markers;
   @override
   void initState() {
     mapController = MapController();
     super.initState();
     locationGetter();
+    markers = [];
+    _subscription =
+        Firestore.instance.collection('gyms').snapshots().listen((data) {
+      var gyms = List<Gym>.generate(
+          data.documents.length,
+          (index) => Gym.fromJson(
+              data.documents[index].data, data.documents[index].documentID));
+      setState(() {
+        markers = List<Marker>.generate(
+          gyms.length,
+          (index) {
+            return Marker(
+              width: 80.0,
+              height: 80.0,
+              point: gyms[index].pos,
+              builder: (ctx) => GestureDetector(
+                child: Container(
+                  child: Image.asset('assets/images/GymIcon.png'),
+                ),
+                onTap: () {
+                  if (gymInfo?.gymId != gyms[index].gymId) {
+                    setState(() {
+                      gymInfo = GymInfo(gymId: gyms[index].gymId);
+                    });
+                  }
+                },
+              ),
+            );
+          },
+        );
+      });
+    });
   }
 
   @override
@@ -36,8 +74,6 @@ class _RaidMapPageState extends State<RaidMapPage> {
 
   @override
   Widget build(BuildContext context) {
-    var gyms = context.watch<RaidProvider>().gyms;
-
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -68,29 +104,7 @@ class _RaidMapPageState extends State<RaidMapPage> {
                   urlTemplate:
                       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                   subdomains: ['a', 'b', 'c']),
-              MarkerLayerOptions(
-                  markers: List<Marker>.generate(
-                gyms.length,
-                (index) {
-                  return Marker(
-                    width: 80.0,
-                    height: 80.0,
-                    point: gyms[index].pos,
-                    builder: (ctx) => GestureDetector(
-                      child: Container(
-                        child: Image.asset('assets/images/GymIcon.png'),
-                      ),
-                      onTap: () {
-                        if (gymInfo?.gymId != gyms[index].gymId) {
-                          setState(() {
-                            gymInfo = GymInfo(gymId: gyms[index].gymId);
-                          });
-                        }
-                      },
-                    ),
-                  );
-                },
-              )),
+              MarkerLayerOptions(markers: markers),
             ],
           ),
         ],
