@@ -9,4 +9,12 @@ class Raid {
   List<RaidGroup> groups;
 
   Raid(this.startTime, this.endTime, this.tier, this.raidBoss, this.groups);
+
+  Map<String, dynamic> toJson() => {
+        'startTime': startTime,
+        'endTime': endTime,
+        'tier': tier,
+        'raidBoss': raidBoss,
+        'groups': groups
+      };
 }

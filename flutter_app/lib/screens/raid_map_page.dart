@@ -23,6 +23,11 @@ class _RaidMapPageState extends State<RaidMapPage> {
     locationGetter();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void locationGetter() async {
     var position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
