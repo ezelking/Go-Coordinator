@@ -43,10 +43,11 @@ class RaidProvider with ChangeNotifier {
       DocumentSnapshot postSnapshot = await tx.get(postRef);
       var raid = Raid.fromJson(postSnapshot.data['raid']);
       raid.groups.add(group);
-      print(postSnapshot.exists);
       if (postSnapshot.exists) {
-        await tx.update(postRef, <String, dynamic>{'raid': raid.toJson()});
-        notifyListeners();
+        await tx.update(postRef, <String, dynamic>{'raid': raid.toJson()}).then(
+            (value) => Future.delayed(const Duration(seconds: 5), () {
+                  getGyms();
+                }));
       }
     });
   }

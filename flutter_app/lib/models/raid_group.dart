@@ -7,8 +7,10 @@ class RaidGroup {
   RaidGroup(this.time, this.raiders);
 
   RaidGroup.fromJson(Map<String, dynamic> json)
-      : time = (json['time'] as Timestamp).toDate().toUtc(), //DateTime.tryPar
-        raiders = (json['raiders'] != null) ? [] : null; //json['groups'];
+      : time = (json['time'] as Timestamp).toDate().toUtc(),
+        raiders = List<Map<String, dynamic>>.from(json['raiders'])
+            .map((Map<String, dynamic> player) => Player.fromJson(player))
+            .toList();
 
   Map<String, dynamic> toJson() => {
         'time': time,
