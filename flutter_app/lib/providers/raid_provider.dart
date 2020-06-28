@@ -14,18 +14,7 @@ class RaidProvider with ChangeNotifier {
 
   //TODO Backend
   RaidProvider() {
-    gyms = [
-      Gym(
-          LatLng(0.0, 0.0),
-          'abc',
-          Raid(DateTime.now(), DateTime.now().add(Duration(minutes: 45)), 5,
-              Pokemon(), [
-            RaidGroup(DateTime.now().add(Duration(minutes: 20)),
-                [Player('john doe', 5)])
-          ]),
-          '00000'),
-      Gym(LatLng(0.0, 0.0), 'def', null, '00001')
-    ];
+    gyms = [];
   }
 
   reportRaid(String gymId, Raid raid) {

@@ -31,12 +31,16 @@ class _RaidMapPageState extends State<RaidMapPage> {
           FlutterMap(
             options: MapOptions(
                 //TODO Get phone location
-                center: gyms?.first?.pos ?? coordinates.LatLng(51.5074, 0.1278),
+                center: (gyms.isNotEmpty)
+                    ? gyms.first.pos
+                    : coordinates.LatLng(51.5074, 0.1278),
                 zoom: 13.0,
                 onTap: (_) {
-                  setState(() {
-                    gymInfo = null;
-                  });
+                  if (gymInfo != null) {
+                    setState(() {
+                      gymInfo = null;
+                    });
+                  }
                 },
                 onLongPress: (pos) async {
                   await _showDialog(context).then((value) => {
