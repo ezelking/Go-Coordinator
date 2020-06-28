@@ -41,9 +41,12 @@ class RaidProvider with ChangeNotifier {
   addGym(LatLng pos, String name) {
     Random rnd = Random();
     _firestore.runTransaction((transaction) async {
-      await transaction.set(_firestore.collection("gyms").document(),
-          Gym(pos, name, null, rnd.nextInt(100000).toString()).toJson());
+      await transaction
+          .set(_firestore.collection("gyms").document(),
+              Gym(pos, name, null, rnd.nextInt(100000).toString()).toJson())
+          .then((value) => Future.delayed(const Duration(seconds: 5), () {
+                getGyms();
+              }));
     });
-    getGyms();
   }
 }
