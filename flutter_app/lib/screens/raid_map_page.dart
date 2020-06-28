@@ -135,7 +135,21 @@ class GymInfo extends StatelessWidget {
                 child: CustomPaint(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [Text('aaaa'), Text('bbbbbbb')]),
+                      children: [
+                        Text(gym.name),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            if (gym.raid != null)
+                              for (int i = 0; i < gym.raid.tier; i++)
+                                Image.asset(
+                                  'assets/images/raid-icon.png',
+                                  scale: 4,
+                                  color: Colors.black,
+                                ),
+                          ],
+                        ),
+                      ]),
                   painter: PokeBallPainter(),
                 )),
           ),
