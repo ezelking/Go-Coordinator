@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart' as coordinates;
+import 'package:latlong/latlong.dart';
 import 'package:pogo/alerts/report_raid_alert.dart';
-import 'package:pogo/models/gym.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:pogo/providers/raid_provider.dart';
 import 'dart:math' as math;
@@ -15,10 +15,18 @@ class RaidMapPage extends StatefulWidget {
 
 class _RaidMapPageState extends State<RaidMapPage> {
   GymInfo gymInfo;
-
+  MapController mapController;
   @override
   void initState() {
+    mapController = MapController();
     super.initState();
+    locationGetter();
+  }
+
+  void locationGetter() async {
+    var position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    mapController.move(LatLng(position.latitude, position.longitude), 13);
   }
 
   @override
@@ -29,11 +37,10 @@ class _RaidMapPageState extends State<RaidMapPage> {
       body: Stack(
         children: <Widget>[
           FlutterMap(
+            mapController: mapController,
             options: MapOptions(
                 //TODO Get phone location
-                center: (gyms.isNotEmpty)
-                    ? gyms.first.pos
-                    : coordinates.LatLng(51.5074, 0.1278),
+                center: LatLng(0.0, 0.0),
                 zoom: 13.0,
                 onTap: (_) {
                   if (gymInfo != null) {

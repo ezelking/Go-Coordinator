@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pogo/providers/raid_provider.dart';
 import 'package:pogo/screens/raid_list_page.dart';
 import 'package:pogo/screens/raid_map_page.dart';
-import 'package:provider/provider.dart';
 
 class RaidPage extends StatelessWidget {
   static String id = 'RaidPage';

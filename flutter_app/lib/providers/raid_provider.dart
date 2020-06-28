@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pogo/models/gym.dart';
-import 'package:pogo/models/player.dart';
-import 'package:pogo/models/pokemon.dart';
 import 'package:pogo/models/raid.dart';
 import 'package:pogo/models/raid_group.dart';
 import 'package:latlong/latlong.dart';
