@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart' as coordinates;
+import 'package:pogo/alerts/report_raid_alert.dart';
 import 'package:pogo/models/gym.dart';
 import 'package:provider/provider.dart';
 import 'package:pogo/providers/raid_provider.dart';
@@ -64,9 +65,9 @@ class _RaidMapPageState extends State<RaidMapPage> {
                         child: Image.asset('assets/images/GymIcon.png'),
                       ),
                       onTap: () {
-                        if (gymInfo?.gym != gyms[index]) {
+                        if (gymInfo?.gymId != gyms[index].gymId) {
                           setState(() {
-                            gymInfo = GymInfo(gym: gyms[index]);
+                            gymInfo = GymInfo(gymId: gyms[index].gymId);
                           });
                         }
                       },
@@ -120,11 +121,15 @@ class _RaidMapPageState extends State<RaidMapPage> {
 }
 
 class GymInfo extends StatelessWidget {
-  final Gym gym;
+  final String gymId;
 
-  const GymInfo({Key key, this.gym}) : super(key: key);
+  const GymInfo({Key key, this.gymId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var gym = context
+        .watch<RaidProvider>()
+        .gyms
+        .firstWhere((element) => element.gymId == gymId);
     return Container(
       height: 200,
       child: Row(
@@ -134,25 +139,36 @@ class GymInfo extends StatelessWidget {
             child: SizedBox(
                 width: 200,
                 height: 200,
-                child: CustomPaint(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(gym.name),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            if (gym.raid != null)
-                              for (int i = 0; i < gym.raid.tier; i++)
-                                Image.asset(
-                                  'assets/images/raid-icon.png',
-                                  scale: 4,
-                                  color: Colors.black,
-                                ),
-                          ],
-                        ),
-                      ]),
-                  painter: PokeBallPainter(),
+                child: GestureDetector(
+                  onTap: () async {
+                    ReportRaidAlert.alert(context).then((value) => {
+                          if (value != null)
+                            {
+                              Provider.of<RaidProvider>(context, listen: false)
+                                  .reportRaid(gym.gymId, value)
+                            }
+                        });
+                  },
+                  child: CustomPaint(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(gym.name),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              if (gym.raid != null)
+                                for (int i = 0; i < gym.raid.tier; i++)
+                                  Image.asset(
+                                    'assets/images/raid-icon.png',
+                                    scale: 4,
+                                    color: Colors.black,
+                                  ),
+                            ],
+                          ),
+                        ]),
+                    painter: PokeBallPainter(),
+                  ),
                 )),
           ),
         ],
