@@ -13,18 +13,20 @@ class Raid {
 
   Raid.fromJson(Map<String, dynamic> json)
       : startTime = (json['startTime'] as Timestamp)
-            .toDate(), //DateTime.tryParse(json['startTime'].toString()),
+            .toDate()
+            .toUtc(), //DateTime.tryParse(json['startTime'].toString()),
         endTime = (json['endTime'] as Timestamp)
-            .toDate(), //DateTime.tryParse(json['endTime'].toString()),
+            .toDate()
+            .toUtc(), //DateTime.tryParse(json['endTime'].toString()),
         tier = json['tier'],
         raidBoss = json['raidBoss'],
-        groups = null; //json['groups'];
+        groups = (json['groups'] != null) ? [] : null; //json['groups'];
 
   Map<String, dynamic> toJson() => {
         'startTime': startTime,
         'endTime': endTime,
         'tier': tier,
         'raidBoss': raidBoss,
-        'groups': groups
+        'groups': groups.map((group) => group.toJson()).toList()
       };
 }

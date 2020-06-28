@@ -29,7 +29,6 @@ class RaidProvider with ChangeNotifier {
   }
 
   reportRaid(String gymId, Raid raid) {
-    print(raid);
     _firestore
         .collection("gyms")
         .document(gymId)
@@ -38,9 +37,18 @@ class RaidProvider with ChangeNotifier {
     });
   }
 
-  createRaidGroup(String gymId, RaidGroup group) {
-    gyms.firstWhere((element) => element.gymId == gymId).raid.groups.add(group);
-    notifyListeners();
+  createRaidGroup(String gymId, RaidGroup group) async {
+    final DocumentReference postRef = _firestore.document('gyms/$gymId');
+    _firestore.runTransaction((Transaction tx) async {
+      DocumentSnapshot postSnapshot = await tx.get(postRef);
+      var raid = Raid.fromJson(postSnapshot.data['raid']);
+      raid.groups.add(group);
+      print(postSnapshot.exists);
+      if (postSnapshot.exists) {
+        await tx.update(postRef, <String, dynamic>{'raid': raid.toJson()});
+        notifyListeners();
+      }
+    });
   }
 
   addGym(LatLng pos, String name) {

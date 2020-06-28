@@ -91,19 +91,23 @@ class RaidListPage extends StatelessWidget {
               title: Text('Create New Raid Party'),
               trailing: Icon(Icons.group_add),
               onTap: () async {
-                var selectedTime = await showTimePicker(
-                  initialTime: TimeOfDay.now(),
-                  context: context,
-                );
-                var convertedTime = Constants.convertDateTime(selectedTime);
-                if (convertedTime.isAfter(DateTime.now()) &&
-                    convertedTime.isAfter(gym.raid.startTime) &&
-                    convertedTime.isBefore(gym.raid.endTime))
-                  Provider.of<RaidProvider>(context, listen: false)
-                      .createRaidGroup(
-                          gym.gymId,
-                          RaidGroup(
-                              Constants.convertDateTime(selectedTime), []));
+                try {
+                  var selectedTime = await showTimePicker(
+                    initialTime: TimeOfDay.now(),
+                    context: context,
+                  );
+                  var convertedTime = Constants.convertDateTime(selectedTime);
+                  if (convertedTime.isAfter(DateTime.now().toUtc()) &&
+                      convertedTime.isAfter(gym.raid.startTime) &&
+                      convertedTime.isBefore(gym.raid.endTime))
+                    Provider.of<RaidProvider>(context, listen: false)
+                        .createRaidGroup(
+                            gym.gymId,
+                            RaidGroup(
+                                Constants.convertDateTime(selectedTime), []));
+                } catch (e) {
+                  print(e);
+                }
               },
             )
           : ListTile(
