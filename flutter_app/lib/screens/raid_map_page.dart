@@ -64,9 +64,11 @@ class _RaidMapPageState extends State<RaidMapPage> {
                         child: Image.asset('assets/images/GymIcon.png'),
                       ),
                       onTap: () {
-                        setState(() {
-                          gymInfo = GymInfo(gym: gyms[index]);
-                        });
+                        if (gymInfo?.gym != gyms[index]) {
+                          setState(() {
+                            gymInfo = GymInfo(gym: gyms[index]);
+                          });
+                        }
                       },
                     ),
                   );
