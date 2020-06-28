@@ -28,10 +28,7 @@ class RaidPage extends StatelessWidget {
           body: TabBarView(
             physics: NeverScrollableScrollPhysics(),
             children: choices.map((Choice choice) {
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: RaidView(choice: choice),
-              );
+              return RaidView(choice: choice);
             }).toList(),
           ),
         ),

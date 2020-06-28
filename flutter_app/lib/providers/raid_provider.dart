@@ -23,14 +23,19 @@ class RaidProvider with ChangeNotifier {
 
     gyms.clear();
     for (var document in updatedGyms.documents) {
-      gyms.add(Gym.fromJson(document.data));
+      gyms.add(Gym.fromJson(document.data, document.documentID));
     }
     notifyListeners();
   }
 
   reportRaid(String gymId, Raid raid) {
-    gyms.firstWhere((element) => element.gymId == gymId).raid = raid;
-    notifyListeners();
+    print(raid);
+    _firestore
+        .collection("gyms")
+        .document(gymId)
+        .updateData({"raid": raid.toJson()}).then((_) {
+      getGyms();
+    });
   }
 
   createRaidGroup(String gymId, RaidGroup group) {
@@ -43,7 +48,7 @@ class RaidProvider with ChangeNotifier {
     _firestore.runTransaction((transaction) async {
       await transaction
           .set(_firestore.collection("gyms").document(),
-              Gym(pos, name, null, rnd.nextInt(100000).toString()).toJson())
+              Gym(pos, name, null, '').toJson())
           .then((value) => Future.delayed(const Duration(seconds: 5), () {
                 getGyms();
               }));
