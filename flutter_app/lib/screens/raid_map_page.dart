@@ -1,58 +1,82 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong/latlong.dart' as coordinates;
+import 'package:pogo/models/gym.dart';
 import 'package:provider/provider.dart';
 import 'package:pogo/providers/raid_provider.dart';
 import 'dart:math' as math;
 
-class RaidMapPage extends StatelessWidget {
+class RaidMapPage extends StatefulWidget {
+  @override
+  _RaidMapPageState createState() => _RaidMapPageState();
+}
+
+class _RaidMapPageState extends State<RaidMapPage> {
+  GymInfo gymInfo;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var gyms = context.watch<RaidProvider>().gyms;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Provider.of<RaidProvider>(context, listen: false)
-              .addGym(LatLng(0.0, 0.0), 'New Gym');
-        },
-        child: Icon(Icons.add_location),
-      ),
-      body: FlutterMap(
-        options: MapOptions(
-            //TODO Get phone location
-            center: gyms?.first?.pos ?? LatLng(51.5074, 0.1278),
-            zoom: 13.0,
-            onLongPress: (pos) async {
-              await _showDialog(context).then((value) => {
-                    if (value != null)
-                      {
-                        Provider.of<RaidProvider>(context, listen: false)
-                            .addGym(pos, value)
-                      }
+      body: Stack(
+        children: <Widget>[
+          FlutterMap(
+            options: MapOptions(
+                //TODO Get phone location
+                center: gyms?.first?.pos ?? coordinates.LatLng(51.5074, 0.1278),
+                zoom: 13.0,
+                onTap: (_) {
+                  setState(() {
+                    gymInfo = null;
                   });
-            }),
-        layers: [
-          TileLayerOptions(
-              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-              subdomains: ['a', 'b', 'c']),
-          MarkerLayerOptions(
-              markers: List<Marker>.generate(
-            gyms.length,
-            (index) {
-              return Marker(
-                width: 80.0,
-                height: 80.0,
-                point: gyms[index].pos,
-                builder: (ctx) => Container(
-                  child: Image.asset('assets/images/GymIcon.png'),
-                ),
-              );
-            },
-          )),
+                },
+                onLongPress: (pos) async {
+                  await _showDialog(context).then((value) => {
+                        if (value != null)
+                          {
+                            Provider.of<RaidProvider>(context, listen: false)
+                                .addGym(pos, value)
+                          }
+                      });
+                }),
+            layers: [
+              TileLayerOptions(
+                  urlTemplate:
+                      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                  subdomains: ['a', 'b', 'c']),
+              MarkerLayerOptions(
+                  markers: List<Marker>.generate(
+                gyms.length,
+                (index) {
+                  return Marker(
+                    width: 80.0,
+                    height: 80.0,
+                    point: gyms[index].pos,
+                    builder: (ctx) => GestureDetector(
+                      child: Container(
+                        child: Image.asset('assets/images/GymIcon.png'),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          gymInfo = GymInfo(gym: gyms[index]);
+                        });
+                      },
+                    ),
+                  );
+                },
+              )),
+            ],
+          ),
         ],
       ),
+      bottomSheet: gymInfo,
     );
   }
 
@@ -94,11 +118,29 @@ class RaidMapPage extends StatelessWidget {
 }
 
 class GymInfo extends StatelessWidget {
+  final Gym gym;
+
+  const GymInfo({Key key, this.gym}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      child: Container(height: 300.0, width: 300),
-      painter: PokeBallPainter(),
+    return Container(
+      height: 200,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          FittedBox(
+            child: SizedBox(
+                width: 200,
+                height: 200,
+                child: CustomPaint(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [Text('aaaa'), Text('bbbbbbb')]),
+                  painter: PokeBallPainter(),
+                )),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -110,7 +152,6 @@ class PokeBallPainter extends CustomPainter {
     Paint paint = Paint()..color = Colors.red;
     // set the color property of the paint
     paint.color = Colors.black;
-
     // center of the canvas is (x,y) => (width/2, height/2)
     var center = Offset(size.width / 2, size.height / 2);
 
@@ -120,7 +161,7 @@ class PokeBallPainter extends CustomPainter {
     paint = Paint()..color = Colors.red;
     canvas.drawArc(
       Rect.fromCenter(
-        center: Offset(size.height / 2, size.width / 2),
+        center: center,
         height: size.height - outlineThickness,
         width: size.width - outlineThickness,
       ),
@@ -132,7 +173,7 @@ class PokeBallPainter extends CustomPainter {
     paint = Paint()..color = Colors.white;
     canvas.drawArc(
       Rect.fromCenter(
-        center: Offset(size.height / 2, size.width / 2),
+        center: center,
         height: size.height - outlineThickness,
         width: size.width - outlineThickness,
       ),
@@ -147,8 +188,8 @@ class PokeBallPainter extends CustomPainter {
 
     canvas.drawCircle(center, size.width / 8, paint);
 
-    canvas.drawLine(Offset(-size.width, size.height / 2),
-        Offset(size.width, size.height / 2), paint);
+    canvas.drawLine(
+        Offset(0, size.height / 2), Offset(size.width, size.height / 2), paint);
     paint.color = Colors.white;
     canvas.drawCircle(center, size.width / 10, paint);
   }

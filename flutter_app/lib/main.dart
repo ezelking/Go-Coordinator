@@ -19,6 +19,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.red,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          bottomSheetTheme: BottomSheetThemeData(
+              backgroundColor: Colors.black.withOpacity(0)),
         ),
         initialRoute: RaidPage.id,
         routes: {RaidPage.id: (context) => RaidPage()},
